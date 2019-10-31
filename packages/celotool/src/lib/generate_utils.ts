@@ -163,7 +163,6 @@ const generateIstanbulExtraData = (validators: Validator[]) => {
     '0x' +
     repeat('0', istanbulVanity * 2) +
     rlp
-      // @ts-ignore
       .encode([
         validators.map((validator) => Buffer.from(validator.address, 'hex')),
         validators.map((validator) => Buffer.from(validator.blsPublicKey, 'hex')),
