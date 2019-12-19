@@ -27,7 +27,7 @@ const defaultConfig = {
   network_id: 1101,
   from: OG_FROM,
   gas: gasLimit,
-  gasPrice: 100000000000,
+  gasPrice: 1000000000000000000,
 }
 
 const freeGasConfig = { ...defaultConfig, ...{ gasPrice: 0 } }
