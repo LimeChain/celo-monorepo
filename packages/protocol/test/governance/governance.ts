@@ -43,7 +43,7 @@ const parseProposalParams = (proposalParams: any) => {
     deposit: proposalParams[1],
     timestamp: proposalParams[2].toNumber(),
     transactionCount: proposalParams[3].toNumber(),
-    description: proposalParams[4],
+    descriptionUrl: proposalParams[4],
   }
 }
 
@@ -101,7 +101,7 @@ contract('Governance', (accounts: string[]) => {
   const expectedParticipationBaseline = multiply(baselineUpdateFactor, participation).plus(
     multiply(fixed1.minus(baselineUpdateFactor), participationBaseline)
   )
-  const descriptionUrl = 'https://description.sample.com'
+  const descriptionUrl = 'https://descriptionUrl.sample.com'
   let transactionSuccess1: Transaction
   let transactionSuccess2: Transaction
   let transactionFail: Transaction
@@ -855,6 +855,21 @@ contract('Governance', (accounts: string[]) => {
           },
         })
       })
+
+      it('should revert if one tries to make a proposal without description', async () => {
+        await assertRevert(
+          governance.propose.call(
+            [transactionSuccess1.value],
+            [transactionSuccess1.destination],
+            // @ts-ignore bytes type
+            transactionSuccess1.data,
+            [transactionSuccess1.data.length],
+            '',
+            // @ts-ignore: TODO(mcortesi) fix typings for TransactionDetails
+            { value: minDeposit }
+          )
+        )
+      })
     })
 
     describe('when making a proposal with two transactions', () => {
@@ -875,7 +890,7 @@ contract('Governance', (accounts: string[]) => {
         assert.equal(proposal.deposit, minDeposit)
         assert.equal(proposal.timestamp, timestamp)
         assert.equal(proposal.transactionCount, 2)
-        assert.equal(proposal.description, descriptionUrl)
+        assert.equal(proposal.descriptionUrl, descriptionUrl)
       })
 
       it('should register the proposal transactions', async () => {
@@ -946,7 +961,6 @@ contract('Governance', (accounts: string[]) => {
           // @ts-ignore: TODO(mcortesi) fix typings for TransactionDetails
           { value: minDeposit }
         )
-        console.log(descriptionUrl)
         await timeTravel(dequeueFrequency, web3)
       })
 

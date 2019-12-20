@@ -45,7 +45,7 @@ library Proposals {
     Transaction[] transactions;
     bool approved;
     uint256 networkWeight;
-    string description;
+    string descriptionUrl;
   }
 
   /**
@@ -85,8 +85,9 @@ library Proposals {
     }
   }
 
-  function setDescription(Proposal storage proposal, string memory description) public {
-    proposal.description = description;
+  function setDescription(Proposal storage proposal, string memory descriptionUrl) public {
+    require(bytes(descriptionUrl).length != 0);
+    proposal.descriptionUrl = descriptionUrl;
   }
 
   /**
@@ -301,7 +302,7 @@ library Proposals {
       proposal.deposit,
       proposal.timestamp,
       proposal.transactions.length,
-      proposal.description
+      proposal.descriptionUrl
     );
   }
 
